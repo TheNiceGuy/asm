@@ -1,17 +1,14 @@
 #PURPOSE: This program finds the maximum number of a
 #         set of data items.
 #
-
-#VARIABLES: The registers have the following uses:
 #
-#           %edi - Holds the index of the data item being examined
-#           %eax - Current data item
-#           %ebx - Largest data item found
+#VARIABLES: %edi - holds the index of the data item being examined
+#           %eax - current data item
+#           %ebx - largest data item found
 #
-#           The following memory locations are used:
+#           data_items - contains the item data
+#           end        - contains the number of item
 #
-#           data_items - Contains the item data
-#           end        - Contains the number of item
 	
 .section .data
 data_items:
