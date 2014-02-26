@@ -1,9 +1,9 @@
 #!/bin/bash
 
-as $1.asm -o $1.o
-ld $1.o -o $1
+as src/$1.asm -o src/$1.o
+ld src/$1.o -o bin/$1
 
-./$1
+./bin/$1
 echo $?
 
-rm $1.o $1
+rm src/$1.o
