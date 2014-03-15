@@ -48,7 +48,7 @@ _start:
 	subl	$ST_SIZE_RESERVE, %esp                 # allocate space for our file descriptor
                                                        # on the stack
 open_fd_in:
-        ### OPEN INPUT FILE
+        ###	OPEN INPUT FILE
 	movl	$SYS_OPEN, %eax                        # 0. open syscall
 	movl	ST_ARGV_1(%ebp), %ebx                  # 1. input filename
 	movl	$O_RDONLY, %ecx                        # 2. read-only flag
@@ -58,17 +58,17 @@ store_fd_in:
 	movl	%eax, ST_FD_IN(%ebp)                   # save the returned file descriptor
 
 open_fd_out:
-	### OPEN OUTPUT FILE
+	###	OPEN OUTPUT FILE
 	movl	$SYS_OPEN, %eax                        # 0. open syscall
 	movl	ST_ARGV_2(%ebp), %ebx                  # 1. output filename
-	movl	$O_WRONLY, %ecx                  # 2. write-only flag
+	movl	$O_WRONLY, %ecx                        # 2. write-only flag
 	movl	$0666, %edx                            # 3. permissions
 	int	$LINUX_SYSCALL                         # call Linux
 store_fd_out:
 	movl	%eax, ST_FD_OUT(%ebp)                  # save the returned file descriptor
 
 read_loop_begin:
-	### READ IN A BLOCK FROM THE INPUT FILE
+	###	READ IN A BLOCK FROM THE INPUT FILE
 	movl	$SYS_READ, %eax                        # 0. read syscall
 	movl	ST_FD_IN(%ebp), %ebx                   # 1. file descriptor
 	movl	$BUFFER_DATA, %ecx                     # 2. buffer location
@@ -79,14 +79,14 @@ read_loop_begin:
 	jle	read_loop_end                          # goto end of loop
 
 read_loop_continue:
-	### CONVERT THE BLOCK TO UPPERCASE
+	###	CONVERT THE BLOCK TO UPPERCASE
 	pushl	$BUFFER_DATA                           # 1. location of the buffer
 	pushl	%eax                                   # 0. size of the buffer
 	call	to_upper                               # call to_upper()
 	popl 	%eax                                   # get the size back
 	addl	$4, %esp                               # restore %esp
 
-	### WRITE THE BLOCK OUT TO THE OUTPUT FILE
+	###	WRITE THE BLOCK OUT TO THE OUTPUT FILE
 	movl	%eax, %edx                             # 3. size of the buffer
 	movl	$SYS_WRITE, %eax                       # 0. write syscall
 	movl	ST_FD_OUT(%ebp), %ebx                  # 1. file descriptor
@@ -96,7 +96,7 @@ read_loop_continue:
 	jmp	read_loop_begin                        # continue the loop
 
 read_loop_end:
-	### CLOSE THE FILES
+	###	CLOSE THE FILES
 	movl	$SYS_CLOSE, %eax                       # 0. close syscall
 	movl	ST_FD_OUT(%ebp), %ebx                  # 1. file descriptor
 	int	$LINUX_SYSCALL                         # call Linux
@@ -105,7 +105,7 @@ read_loop_end:
 	movl	ST_FD_IN(%ebp), %ebx                   # 1. file descriptor
 	int	$LINUX_SYSCALL                         # call Linux
 
-	### EXIT
+	###	EXIT
 	movl	$SYS_EXIT, %eax                        # 0. exit syscall
 	movl	$0, %ebx                               # 1. return status
 	int	$LINUX_SYSCALL                         # call Linux
@@ -135,7 +135,7 @@ to_upper:
 	pushl	%ebp
 	movl	%esp, %ebp
 
-	### SET UP VARIABLE
+	###	SET UP VARIABLE
 	movl	ST_BUFFER(%ebp), %eax
 	movl	ST_BUFFER_LENGTH(%ebp), %ebx
 	movl	$0, %edi
