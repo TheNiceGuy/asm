@@ -1,9 +1,21 @@
 #!/bin/bash
 
+if [[ ! -d bin/ ]]; then
+    mkdir bin
+fi
+
+if [[ ! -d test/ ]]; then
+    mkdir test
+fi
+
 as src/$1.asm -o src/$1.o
 ld src/$1.o -o bin/$1
 
-./bin/$1
+./bin/$1 $2 $3
 echo $?
 
-rm src/$1.o
+if [[ -f src/$1.o ]]; then
+    rm src/$1.o
+else
+    exit 1
+fi
