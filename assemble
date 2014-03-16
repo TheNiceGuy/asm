@@ -8,10 +8,23 @@ if [[ ! -d test/ ]]; then
     mkdir test
 fi
 
-as src/$1.asm -o src/$1.o
-ld src/$1.o -o bin/$1
+if [[ -f src/$1 ]]; then
+    as src/$1 -o src/$1.o
+elif [[ -f src/$1.asm ]]; then
+    as src/$1.asm -o src/$1.o
+else
+    echo "Could not locate source file in src/"
+    exit 1
+fi
 
-./bin/$1 $2 $3
+if [[ -f src/$1.o ]]; then
+    ld src/$1.o -o bin/$1
+else
+    echo "Assembler failed"
+    exit 1
+fi
+
+./bin/$1 $2 $3 $4 $ 5
 echo $?
 
 if [[ -f src/$1.o ]]; then
