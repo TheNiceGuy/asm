@@ -1,34 +1,34 @@
 #!/bin/bash
 
 if [[ ! -d bin/ ]]; then
-    mkdir bin
+	mkdir bin
 fi
 
 if [[ ! -d test/ ]]; then
-    mkdir test
+	mkdir test
 fi
 
 if [[ -f src/$1 ]]; then
-    as src/$1 -o src/$1.o
+	as src/$1 -o src/$1.o
 elif [[ -f src/$1.asm ]]; then
-    as src/$1.asm -o src/$1.o
+	as src/$1.asm -o src/$1.o
 else
-    echo "Could not locate source file in src/"
-    exit 1
+	echo "ERROR: Could not locate source file in src/"
+	exit 1
 fi
 
 if [[ -f src/$1.o ]]; then
-    ld src/$1.o -o bin/$1
+	ld src/$1.o -o bin/$1
+	rm src/$1.o
 else
-    echo "Assembler failed"
-    exit 1
+	echo "ERROR: Assembler failed..."
+	exit 1
 fi
 
-./bin/$1 $2 $3 $4 $ 5
-echo $?
-
-if [[ -f src/$1.o ]]; then
-    rm src/$1.o
+if [[ -f ./bin/$1 ]]; then
+	./bin/$1 $2 $3 $4 $5
+	echo $?
 else
-    exit 1
+	echo "ERROR: Linker failed..."
+	exit 1
 fi
